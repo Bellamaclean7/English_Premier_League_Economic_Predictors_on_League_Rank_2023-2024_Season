@@ -19,6 +19,7 @@ set.seed(123) # Setting seed for reproducibility
 
 # Calculate correlation matrix
 cor_matrix <- cor(merged_data |> select(where(is.numeric)), use = "complete.obs")
+print(cor_matrix)
 
 # Generate corrplot 
 corrplot(cor_matrix, method = "circle", type = "upper", order = "hclust",

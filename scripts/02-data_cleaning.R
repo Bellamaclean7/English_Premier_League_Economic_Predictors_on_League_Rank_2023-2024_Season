@@ -9,6 +9,8 @@
 
 #### Workspace setup ####
 library(tidyverse)
+library(readr)
+library(dplyr)
 
 #### Clean data ####
 # Load the full season stats dataset for Toronto FC from a CSV file
@@ -55,6 +57,13 @@ merged_data <- merged_data |>
     pts_first6 = pts.y
   )
 
+# reversing the scale of the lg_rank
+merged_data <- merged_data |>
+  mutate(transformed_rank = max(lg_rank) + 1 - lg_rank)
+
+# View the first few rows to confirm the transformation
+print(merged_data |> select(lg_rank, transformed_rank) |> head())
+
 merged_data <- merged_data |>
   mutate(
     # Calculate the win rate for the first 6 games of the season.
@@ -81,6 +90,8 @@ merged_data <- merged_data |>
     pts_pct_first6 = ifelse(is.na(pts_pct_first6) | is.infinite(pts_pct_first6), 0, pts_pct_first6),
     avg_goals_scored_per_game = ifelse(is.na(avg_goals_scored_per_game) | is.infinite(avg_goals_scored_per_game), 0, avg_goals_scored_per_game)
   )
+
+head(merged_data)
 
 #### Save data ####
 write_csv(merged_data, "data/analysis_data/analysis_data.csv")
