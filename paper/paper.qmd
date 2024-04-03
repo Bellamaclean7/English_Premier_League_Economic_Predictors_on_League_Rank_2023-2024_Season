@@ -1,6 +1,6 @@
 ---
-title: "Predicting English Premier League Rankings in Relation to Total Team Spending in the 2023-2024 Season"
-subtitle: "My subtitle if needed"
+title: " Total Team Spending and Profitability Leads Results in a Higher League Ranking in the English Premier League"
+subtitle: "An Analysis of Economic Predictors on League Rank in the 2023-2024 Season"
 author: 
   - Isabella MacLean
 thanks: "Code and data are available at: LINK."
