@@ -1,21 +1,21 @@
-team,pts
-Liverpool F.C.,67
-Arsenal F.C.,65
-Manchester City F.C.,64
-Aston Villa F.C.,59
-Tottenham Hotspur F.C.,56
-Manchester United F.C.,48
-West Ham United F.C.,44
-Newcastle United F.C.,43
-Brighton & Hove Albion,42
-Wolverhampton Wanderers F.C.,41
-Chelsea F.C.,40
-Fulham F.C.,39
-AFC Bournemouth,38
-Crystal Palace,30
-Brentford F.C.,27
-Everton F.C.,25
-Nottingham Forest F.C.,22
-Luton Town F.C.,22
-Burnley F.C.,18
-Sheffield United F.C.,15
+team,pts,top_seven_finish
+Liverpool F.C.,67,1
+Arsenal F.C.,65,1
+Manchester City F.C.,64,1
+Aston Villa F.C.,59,1
+Tottenham Hotspur F.C.,56,1
+Manchester United F.C.,48,1
+West Ham United F.C.,44,1
+Newcastle United F.C.,43,0
+Brighton & Hove Albion,42,0
+Wolverhampton Wanderers F.C.,41,0
+Chelsea F.C.,40,0
+Fulham F.C.,39,0
+AFC Bournemouth,38,0
+Crystal Palace,30,0
+Brentford F.C.,27,0
+Everton F.C.,25,0
+Nottingham Forest F.C.,22,0
+Luton Town F.C.,22,0
+Burnley F.C.,18,0
+Sheffield United F.C.,15,0

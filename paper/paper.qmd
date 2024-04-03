@@ -1,9 +1,8 @@
 ---
-title: "My title"
+title: "Predicting English Premier League Rankings in Relation to Total Team Spending in the 2023-2024 Season"
 subtitle: "My subtitle if needed"
 author: 
-  - First author
-  - Another author
+  - Isabella MacLean
 thanks: "Code and data are available at: LINK."
 date: today
 date-format: long
@@ -27,7 +26,22 @@ library(readr)
 library(here)
 library(kableExtra)
 
-merged_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+show_col_types = FALSE
+
+matchday_attendance <- read_csv(here::here("data/raw_data/average_home_matchday_attendance_2023-2024.csv"))
+show_col_types = FALSE
+
+market_value <- read_csv(here::here("data/raw_data/market_value_2023-2024.csv"))
+show_col_types = FALSE
+
+team_rank <- read_csv(here::here("data/raw_data/team_rank_2023-2024.csv"))
+show_col_types = FALSE
+
+total_payroll <- read_csv(here::here("data/raw_data/total_payroll_2023-2024.csv"))
+show_col_types = FALSE
+
+total_transfer_spending <- read_csv(here::here("data/raw_data/total_transfer_spending_2023-2024.csv"))
 show_col_types = FALSE
 ```
 
@@ -41,27 +55,6 @@ The remainder of this paper is structured as follows. @sec-data....
 
 
 # Data {#sec-data}
-```{r plot-chunk, fig.cap="Correlation matrix of numeric variables", fig.width=8, fig.height=7, echo=FALSE}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-# Assuming 'lg_rank' is your league rank variable
-merged_data$transformed_rank <- max(merged_data$lg_rank) + 1 - merged_data$lg_rank
-# Calculate the correlation matrix for numeric columns
-cor_matrix <- cor(merged_data |> select(where(is.numeric)), use = "complete.obs")
-
-corrplot(cor_matrix, method = "circle", type = "upper", order = "hclust",
-         tl.col = "black", tl.srt = 45, tl.cex = 0.7)
-
-# Manually add title
-mtext("Correlation Matrix for Toronto FC's Performance Features", side=3, line=3, cex=1.5)
-```
-
-
-
-# Model
 
 
 ## Model set-up
@@ -69,8 +62,93 @@ mtext("Correlation Matrix for Toronto FC's Performance Features", side=3, line=3
 
 ### Model justification
 
+# Model
 
 # Results
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-pts_vs_average_home_matchday_attendance
+#| fig-cap: Figure 1 presents a scatter plot illustrating the relationship between total league points and average matchday attendance during the 2023-2024 season. Each point represents a team, plotted with their total points on the x-axis and their average home attendance on the y-axis. The trend line, added using linear regression analysis, suggests a correlation between team performance and matchday turnout. The correlation coefficient of 0.694060419947882 indicates a positive association with moderate correlation, where teams with higher league points tend to have greater average attendance.
+
+# Calculate correlation coefficient for league position and average attendance
+cor_attendance <- cor(analysis_data$pts, analysis_data$average_home_matchday_attendance, use = "complete.obs")
+
+# Create a scatter plot for league position and average attendance
+ggplot(analysis_data, aes(x = pts, y = average_home_matchday_attendance)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Figure 1: Average Matchday Attendance in Relation 
+       to League Position for the 2023-2024 Season",
+       subtitle = paste("Correlation coefficient:", cor_attendance),
+       x = "Total League Points",
+       y = "Average Attendance")
+```
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-pts_vs_total_wage_bill
+#| fig-cap: Figure 2 depicts the association between total league points and the total payroll for teams in the 2023-2024 season. Each point on the plot corresponds to a team, positioned according to their accumulated points for the season along the x-axis and their respective payroll on the y-axis. The linear regression trend line suggests a correlation between a team’s financial expenditure on payroll and their success in the league. A correlation coefficient of 0.770829037567151 reflects a positive relationship, implying that teams with higher payrolls may be more likely to accumulate greater league points.
+
+# Calculate correlation coefficient for league position and average total wages
+cor_wages <- cor(analysis_data$pts, analysis_data$total_wage_bill, use = "complete.obs")
+
+# Create a scatter plot for league position and average total wages
+ggplot(analysis_data, aes(x = pts, y = total_wage_bill)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Figure 2: Total Payroll in Relation to League 
+       Points for the 2023-2024 Season",
+       subtitle = paste("Correlation coefficient:", cor_wages),
+       x = "Total League Points",
+       y = "Total Payroll")
+```
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-pts_vs_transfer_fees
+#| fig-cap: Figure 3 illustrates the relationship between teams total transfer spending and their corresponding league points for the 2023-2024 season. The scatter plot shows each team as a distinct point, positioned by their total league points on the x-axis and their transfer spending on the y-axis. The trend line, calculated with linear regression, indicates a moderate positive correlation, with a correlation coefficient of approximately 0.417985956450557. This suggests that higher league points tend to coincide with increased transfer spending, although the relationship is not strongly linear.
+
+# Calculate correlation coefficient for league position and total transfer fees
+cor_transfers <- cor(analysis_data$pts, analysis_data$transfer_fees, use = "complete.obs")
+
+# Create a scatter plot for league position and average total wages
+ggplot(analysis_data, aes(x = pts, y = transfer_fees)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Figure 3: Average Transfer Spending in Relation to 
+       League Points for the 2023-2024 Season",
+       subtitle = paste("Correlation coefficient:", cor_transfers),
+       x = "Total League Points",
+       y = "Total Transfer Fees")
+```
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-pts_vs_market_value
+#| fig-cap: Figure 4 demonstrates the correlation between the current market value of teams and their accumulated league points for the 2023-2024 season. The scatter plot places each team by the total points they have secured on the x-axis against their market value on the y-axis. A pronounced upward trend represented by the linear regression line, with a correlation coefficient of 0.849962012423038, indicates a strong positive relationship. This suggests that teams with higher market values tend to amass more league points, underlining a potential link between financial strength and on-field success.
+
+# Calculate correlation coefficient for league position and market value
+cor_market <- cor(analysis_data$pts, analysis_data$market_value, use = "complete.obs")
+
+# Create a scatter plot for league position and market value
+ggplot(analysis_data, aes(x = pts, y = market_value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Figure 4: Current Market Value in Relation 
+       to League Points for the 2023-2024 Season",
+       subtitle = paste("Correlation coefficient:", cor_market),
+       x = "Total League Points",
+       y = "Total Market Value")
+```
+
 
 # Discussion
 
@@ -87,25 +165,6 @@ mtext("Correlation Matrix for Toronto FC's Performance Features", side=3, line=3
 \appendix
 
 # Appendix {-}
-
-```{r}
-#| label: tbl-lg-rank-correlation
-#| tbl-cap: Correlation of Variables with lg_rank
-#| echo: false
-#| warning: false
-
-# Convert the correlation matrix to a long-format dataframe, focusing on lg_rank
-cor_df_long_lg_rank <- cor_matrix |>
-  as.data.frame() |>
-  rownames_to_column("Variable") |>
-  pivot_longer(cols = -Variable, names_to = "Related_Variable", values_to = "Correlation") |>
-  filter(Variable == "lg_rank" ) |>
-  distinct()
-
-# Use knitr::kable to display the table, focusing on correlations with lg_rank
-knitr::kable(cor_df_long_lg_rank, padding = 5, format = "latex", booktabs = TRUE) |>
-  kableExtra::kable_styling(latex_options = c("striped", "scale_down"))
-```
 
 
 # Additional data details

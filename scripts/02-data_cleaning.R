@@ -24,9 +24,6 @@ total_payroll <- read.csv("data/raw_data/total_payroll_2023-2024.csv")
 # Load the total transfer spending dataset from a CSV file that shows the total transfer spending of each EPL team entering the 2023-2024 season
 total_transfer_spending <- read.csv("data/raw_data/total_transfer_spending_2023-2024.csv")
 
-# Rename the 'Team' column to 'team' in total_transfer_spending because this was a typo while creating the datasets and the rest of the data use the variable name 'team'
-total_transfer_spending <- rename(total_transfer_spending, team = Team)
-
 # Merge the two datasets into one
 # The datasets are merged on the team column
 analysis_data <- matchday_attendance |>
@@ -38,9 +35,18 @@ analysis_data <- matchday_attendance |>
 # Inspect the dataset
 head(analysis_data)
 
+# Convert character columns with numeric values to numeric types after removing non-numeric characters
+analysis_data$average_home_matchday_attendance <- as.integer(gsub(",", "", analysis_data$average_home_matchday_attendance))
+analysis_data$total_wage_bill <- as.numeric(gsub("£", "", gsub(",", "", analysis_data$total_wage_bill)))
+analysis_data$transfer_fees <- as.numeric(gsub("£", "", gsub(",", "", analysis_data$transfer_fees)))
+# Assuming market_value is already in a format that can be directly converted
+analysis_data$market_value <- as.numeric(analysis_data$market_value)
+
 # Get rid of total payroll per position coloumns and the active.players column
 analysis_data <- analysis_data |>
   select(-active.palyers, -forwards, -midfielders, -defensmen, -goalkeepers)
 
 #### Save data ####
 write_csv(analysis_data, "data/analysis_data/analysis_data.csv")
+
+
