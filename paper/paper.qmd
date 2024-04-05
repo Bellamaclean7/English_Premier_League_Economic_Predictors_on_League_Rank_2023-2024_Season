@@ -7,7 +7,7 @@ thanks: "Code and data are available at: https://github.com/Bellamaclean7/Englis
 _Predictors_on_League_Rank_2023-2024_Season.git."
 date: today
 date-format: long
-abstract: "This project will investigate how to formulate a linear regression model based on three explanatory variables: match attendance, total payroll, and market value, in order to try and predict a teams finishing place in the standings. Utilizing R's lm function, this paper analyzes the relationship between these variables and teams total points accumulated during the 2023-2024 season. Findings suggest that each explanatory variable significantly influences a team's league position (total points), highlighting the association between team success and team wealth."
+abstract: "This project investigates how to formulate a linear regression model based on three explanatory variables: match attendance, total payroll, and market value, in order to try and predict a teams finishing place in the standings. Utilizing R's lm function, this paper analyzes the relationship between these variables and teams total points accumulated during the English Premier League 2023-2024 season. Findings suggest that each explanatory variable significantly influences a team's league position (total points), highlighting the association between team success and team wealth."
 format: pdf
 toc: true
 number-sections: true
@@ -27,6 +27,7 @@ library(knitr)
 library(readr)
 library(here)
 library(kableExtra)
+library(scales)
 
 analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 show_col_types = FALSE
@@ -54,9 +55,135 @@ You can and should cross-reference sections and sub-sections. We use @citeR and 
 
 The remainder of this paper is structured as follows. @sec-data....
 
+You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
 
+The remainder of this paper is structured as follows. @sec-data....
+
+You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+
+The remainder of this paper is structured as follows. @sec-data....
+
+You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+
+The remainder of this paper is structured as follows. @sec-data....
 
 # Data {#sec-data}
+
+The analysis dataset used for this paper is comprised of five datasets that were compiled during the data cleaning process. The first dataset, @tbl-1, contains every teams average home matchday attendance for the 2023-2024 season, which was collected from @footballwebpages2023premierleague. The second dataset, @tbl-2, contains every teams current market value, which was collected from @transfermarkt2023premierleague. The third dataset, @tbl-3, contains the current total payroll for each team in the English Premier League, and was collected from @spotrac2023eplpayroll. The forth dataset, @tbl-4, contains the total amount spent in transfer fees prior to the start of the 2023-2024 season for each team in the English Premier League, and was collected from @spotrac2023epltransferfees. The final dataset, @tbl-5, contains the total points earned by each team in the English Premier League during the 2023-2024 as of Matchday 30, and was retrieved from @transfermarkt2023premierleaguematchday30.
+
+```{r}
+#| label: tbl-1
+#| tbl-cap: The dataset containing average home matchday attendance for each team in the English Premier League during the 2023-2024 season.
+#| echo: false
+#| warning: false
+
+# Assigning new column names to the dataframe
+colnames(matchday_attendance) <- c("Team", "Home Matchday Attendance")
+
+# Ensure that the "Home Matchday Attendance" column is numeric for formatting
+matchday_attendance$`Home Matchday Attendance` <- as.numeric(matchday_attendance$`Home Matchday Attendance`)
+
+# Format the "Home Matchday Attendance" column to include commas
+matchday_attendance$`Home Matchday Attendance` <- comma(matchday_attendance$`Home Matchday Attendance`)
+
+# Generate the table with adjusted font size to fit the page
+kable(matchday_attendance, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 8)
+```
+
+```{r, results='asis'}
+#| label: tbl-2
+#| tbl-cap: The dataset containing the current market value of each team in the English Premier League.
+#| echo: false
+#| warning: false
+
+# Assigning new column names to the dataframe
+colnames(market_value) <- c("Team", "Market Value")
+
+# Function to format values in billions and millions
+format_value <- function(value) {
+  if (value >= 1) {
+    # Value is in billions
+    return(paste0("£", formatC(value, format = "f", digits = 2), "B"))
+  } else {
+    # Value is in millions
+    # Convert to millions (e.g., 0.9 becomes 900)
+    million_value <- value * 1000
+    return(paste0("£", round(million_value), "M"))
+  }
+}
+
+# Apply the function to every market value
+market_value$`Market Value` <- sapply(market_value$`Market Value`, format_value)
+
+# Generate the table with adjusted font size to fit the page
+kable(market_value, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 8)
+```
+
+```{r}
+#| label: tbl-3
+#| tbl-cap: The dataset containing the current total payroll for each team in the English Premier League.
+#| echo: false
+#| warning: false
+
+# Assigning new column names to the dataframe
+colnames(total_payroll) <- c("Team", "Active Players", "Forwards", "Midfielders", "Defensmen", "Goalkeepers", "Total")
+
+# Generate the table with adjusted font size to fit the page
+kable(total_payroll, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 8)
+```
+
+```{r}
+#| label: tbl-4
+#| tbl-cap: The dataset containing the total amount spent in transfer fees prior to the start of the 2023-2024 season for each team in the English Premier League.
+#| echo: false
+#| warning: false
+
+# Assigning new column names to the dataframe
+colnames(total_transfer_spending) <- c("Team", "Total Transfer Fees")
+                             
+# Generate the table with adjusted font size to fit the page
+kable(total_transfer_spending, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 8)
+```
+
+```{r}
+#| label: tbl-5
+#| tbl-cap: The dataset containing the total points earned by each team in the English Premier League during the 2023-2024 as of Matchday 30.
+#| echo: false
+#| warning: false
+
+# Assigning new column names to the dataframe
+colnames(team_rank) <- c("Team", "Points")
+                             
+# Generate the table with adjusted font size to fit the page
+kable(team_rank, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 8)
+```
+
+The datasets were then combined during the cleaning process to create one master dataset for analysis. The merging process was conducted on the common column `team`, ensuring that data from each dataset corresponding to a specific team was consolidated into a single row within the analysis dataset. This methodology allowed for a unified view of each team's `matchday attendance`, `market value`, `total team points`, `total payroll`, and `total transfer spending`, facilitating a multifaceted analysis of team performance and financial metrics.
+
+As part of the data cleaning process, specific columns containing numeric values but stored as character strings—due to the inclusion of commas as thousands separators and currency symbols—were converted to their appropriate numeric data types. This conversion involved stripping the character columns 'average_home_matchday_attendance', 'total_wage_bill', and 'transfer_fees' of non-numeric characters (i.e., commas and the pound sterling symbol) and then casting them to integer or numeric types as contextually appropriate. This step was essential for enabling quantitative analysis of these variables.
+
+Furthermore, to streamline the dataset and focus the analysis on key variables of interest, certain columns deemed extraneous to the core analytical objectives were removed. These included detailed payroll information per position (`forwards`, `midfielders`, `defensmen`, `goalkeepers`) and the column `active.players`. The removal of these columns served to reduce the dataset's complexity, facilitating a more focused and manageable analysis of the relationships between team performance metrics and financial expenditures.
+
+The resulting dataset for analysis is shown in @tab-6.
+
+```{r}
+#| label: tbl-6
+#| tbl-cap: The dataset containing the total points earned by each team in the English Premier League during the 2023-2024 as of Matchday 30.
+#| echo: false
+#| warning: false
+
+# Assigning new column names to the dataframe
+colnames(analysis_data) <- c("Team", "Home Matchday Attendance", "Market Value", "Points", "Total Payroll", "Total Transfer Fees")
+                             
+# Generate the table with adjusted font size to fit the page
+kable(analysis_data, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 8)
+```
 
 # Model
 
@@ -105,90 +232,6 @@ Equation (2) can be explained as follows:
 The linear regression model given by Equation (2), derived from the foundational principles of linear regression outlined in Equation (1), provides a transparent mechanism to quantify the impact of various factors on the total points accumulated by EPL teams (a direct correlation to team rank in league standings). The model will aid in gaining insights into how attendance, total payroll, and market value could affect performance metrics. The model is operationalized using the `lm` function in `R`.
 
 # Results
-
-```{r}
-#| warning: false
-#| echo: false
-#| label: fig-pts_vs_average_home_matchday_attendance
-#| fig-cap: Figure 1 presents a scatter plot illustrating the relationship between total league points and average matchday attendance during the 2023-2024 season. Each point represents a team, plotted with their total points on the x-axis and their average home attendance on the y-axis. The trend line, added using linear regression analysis, suggests a correlation between team performance and matchday turnout. The correlation coefficient of 0.694060419947882 indicates a positive association with moderate correlation, where teams with higher league points tend to have greater average attendance.
-
-# Calculate correlation coefficient for league position and average attendance
-cor_attendance <- cor(analysis_data$pts, analysis_data$average_home_matchday_attendance, use = "complete.obs")
-
-# Create a scatter plot for league position and average attendance
-ggplot(analysis_data, aes(x = pts, y = average_home_matchday_attendance)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme_minimal() +
-  labs(title = "Figure 1: Average Matchday Attendance in Relation 
-       to League Position for the 2023-2024 Season",
-       subtitle = paste("Correlation coefficient:", cor_attendance),
-       x = "Total League Points",
-       y = "Average Attendance")
-```
-
-```{r}
-#| warning: false
-#| echo: false
-#| label: fig-pts_vs_total_wage_bill
-#| fig-cap: Figure 2 depicts the association between total league points and the total payroll for teams in the 2023-2024 season. Each point on the plot corresponds to a team, positioned according to their accumulated points for the season along the x-axis and their respective payroll on the y-axis. The linear regression trend line suggests a correlation between a team’s financial expenditure on payroll and their success in the league. A correlation coefficient of 0.770829037567151 reflects a positive relationship, implying that teams with higher payrolls may be more likely to accumulate greater league points.
-
-# Calculate correlation coefficient for league position and average total wages
-cor_wages <- cor(analysis_data$pts, analysis_data$total_wage_bill, use = "complete.obs")
-
-# Create a scatter plot for league position and average total wages
-ggplot(analysis_data, aes(x = pts, y = total_wage_bill)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme_minimal() +
-  labs(title = "Figure 2: Total Payroll in Relation to League 
-       Points for the 2023-2024 Season",
-       subtitle = paste("Correlation coefficient:", cor_wages),
-       x = "Total League Points",
-       y = "Total Payroll")
-```
-
-```{r}
-#| warning: false
-#| echo: false
-#| label: fig-pts_vs_transfer_fees
-#| fig-cap: Figure 3 illustrates the relationship between teams total transfer spending and their corresponding league points for the 2023-2024 season. The scatter plot shows each team as a distinct point, positioned by their total league points on the x-axis and their transfer spending on the y-axis. The trend line, calculated with linear regression, indicates a moderate positive correlation, with a correlation coefficient of approximately 0.417985956450557. This suggests that higher league points tend to coincide with increased transfer spending, although the relationship is not strongly linear.
-
-# Calculate correlation coefficient for league position and total transfer fees
-cor_transfers <- cor(analysis_data$pts, analysis_data$transfer_fees, use = "complete.obs")
-
-# Create a scatter plot for league position and average total wages
-ggplot(analysis_data, aes(x = pts, y = transfer_fees)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme_minimal() +
-  labs(title = "Figure 3: Average Transfer Spending in Relation to 
-       League Points for the 2023-2024 Season",
-       subtitle = paste("Correlation coefficient:", cor_transfers),
-       x = "Total League Points",
-       y = "Total Transfer Fees")
-```
-```{r}
-#| warning: false
-#| echo: false
-#| label: fig-pts_vs_market_value
-#| fig-cap: Figure 4 demonstrates the correlation between the current market value of teams and their accumulated league points for the 2023-2024 season. The scatter plot places each team by the total points they have secured on the x-axis against their market value on the y-axis. A pronounced upward trend represented by the linear regression line, with a correlation coefficient of 0.849962012423038, indicates a strong positive relationship. This suggests that teams with higher market values tend to amass more league points, underlining a potential link between financial strength and on-field success.
-
-# Calculate correlation coefficient for league position and market value
-cor_market <- cor(analysis_data$pts, analysis_data$market_value, use = "complete.obs")
-
-# Create a scatter plot for league position and market value
-ggplot(analysis_data, aes(x = pts, y = market_value)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme_minimal() +
-  labs(title = "Figure 4: Current Market Value in Relation 
-       to League Points for the 2023-2024 Season",
-       subtitle = paste("Correlation coefficient:", cor_market),
-       x = "Total League Points",
-       y = "Total Market Value")
-```
-
 
 # Discussion
 

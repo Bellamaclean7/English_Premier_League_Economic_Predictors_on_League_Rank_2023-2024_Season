@@ -24,7 +24,7 @@ total_payroll <- read.csv("data/raw_data/total_payroll_2023-2024.csv")
 # Load the total transfer spending dataset from a CSV file that shows the total transfer spending of each EPL team entering the 2023-2024 season
 total_transfer_spending <- read.csv("data/raw_data/total_transfer_spending_2023-2024.csv")
 
-# Merge the two datasets into one
+# Merge the five datasets into one
 # The datasets are merged on the team column
 analysis_data <- matchday_attendance |>
   full_join(market_value, by = "team") |>
@@ -42,7 +42,7 @@ analysis_data$transfer_fees <- as.numeric(gsub("£", "", gsub(",", "", analysis_
 # Assuming market_value is already in a format that can be directly converted
 analysis_data$market_value <- as.numeric(analysis_data$market_value)
 
-# Get rid of total payroll per position coloumns and the active.players column
+# Get rid of total payroll per position columns and the active.players column
 analysis_data <- analysis_data |>
   select(-active.palyers, -forwards, -midfielders, -defensmen, -goalkeepers)
 
