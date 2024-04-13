@@ -46,6 +46,9 @@ analysis_data$market_value <- as.numeric(analysis_data$market_value)
 analysis_data <- analysis_data |>
   select(-active.palyers, -forwards, -midfielders, -defensmen, -goalkeepers)
 
+# Inspect the dataset
+head(analysis_data)
+
 #### Save data ####
 write_csv(analysis_data, "data/analysis_data/analysis_data.csv")
 

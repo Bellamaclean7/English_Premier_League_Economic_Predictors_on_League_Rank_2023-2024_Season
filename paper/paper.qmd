@@ -28,6 +28,7 @@ library(readr)
 library(here)
 library(kableExtra)
 library(scales)
+library(ggplot2)
 
 analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 show_col_types = FALSE
@@ -169,7 +170,7 @@ As part of the data cleaning process, specific columns containing numeric values
 
 Furthermore, to streamline the dataset and focus the analysis on key variables of interest, certain columns deemed extraneous to the core analytical objectives were removed. These included detailed payroll information per position (`forwards`, `midfielders`, `defensmen`, `goalkeepers`) and the column `active.players`. The removal of these columns served to reduce the dataset's complexity, facilitating a more focused and manageable analysis of the relationships between team performance metrics and financial expenditures.
 
-The resulting dataset for analysis is shown in @tab-6.
+The resulting dataset for analysis is shown in @tbl-6.
 
 ```{r}
 #| label: tbl-6
@@ -177,13 +178,105 @@ The resulting dataset for analysis is shown in @tab-6.
 #| echo: false
 #| warning: false
 
-# Assigning new column names to the dataframe
-colnames(analysis_data) <- c("Team", "Home Matchday Attendance", "Market Value", "Points", "Total Payroll", "Total Transfer Fees")
-                             
-# Generate the table with adjusted font size to fit the page
-kable(analysis_data, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+# Creating a temporary copy of the dataframe for table presentation
+table_data <- analysis_data
+
+# Specifying new column names for the table aesthetics
+names(table_data) <- c("Team", "Home Matchday Attendance", "Market Value", "Points", "Total Payroll", "Total Transfer Fees")
+
+# Generate the table with adjusted column names and font size
+kable(table_data, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
   kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 8)
 ```
+
+From here I began examining the relationships between English Premier League teams' league performance (expressed in points accumulated) and various financial indicators during the 2023-2024 season. The following four graphs (@fig-pts_vs_average_home_matchday_attendance, @fig-pts_vs_total_wage_bill, @fig-pts_vs_market_value, and @fig-pts_vs_transfer_fees) presents a scatter plot paired with a linear regression trend line to evaluate the correlation between league points and one of the four key economic metrics presented in @tbl-6.
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-pts_vs_average_home_matchday_attendance
+#| fig-cap: Scatter plot illustrating the relationship between total league points and average matchday attendance during the 2023-2024 season. Each point represents a team, plotted with their total points on the x-axis and their average home attendance on the y-axis. The trend line, added using linear regression analysis, suggests a correlation between team performance and matchday turnout. The correlation coefficient of 0.694060419947882 indicates a positive association with moderate correlation, where teams with higher league points tend to have greater average attendance.
+
+# Calculate correlation coefficient for league position and average attendance
+cor_attendance <- cor(analysis_data$pts, analysis_data$average_home_matchday_attendance, use = "complete.obs")
+
+# Create a scatter plot for league position and average attendance
+ggplot(analysis_data, aes(x = pts, y = average_home_matchday_attendance)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Figure 1: Average Matchday Attendance in Relation 
+       to League Position for the 2023-2024 Season",
+       subtitle = paste("Correlation coefficient:", cor_attendance),
+       x = "Total League Points",
+       y = "Average Attendance")
+```
+
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-pts_vs_total_wage_bill
+#| fig-cap: Scatter plot depicting the association between total league points and the total payroll for teams in the 2023-2024 season. Each point on the plot corresponds to a team, positioned according to their accumulated points for the season along the x-axis and their respective payroll on the y-axis. The linear regression trend line suggests a correlation between a team’s financial expenditure on payroll and their success in the league. A correlation coefficient of 0.770829037567151 reflects a positive relationship, implying that teams with higher payrolls may be more likely to accumulate greater league points.
+
+# Calculate correlation coefficient for league position and average total wages
+cor_wages <- cor(analysis_data$pts, analysis_data$total_wage_bill, use = "complete.obs")
+
+# Create a scatter plot for league position and average total wages
+ggplot(analysis_data, aes(x = pts, y = total_wage_bill)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Figure 2: Total Payroll in Relation to League 
+       Points for the 2023-2024 Season",
+       subtitle = paste("Correlation coefficient:", cor_wages),
+       x = "Total League Points",
+       y = "Total Payroll")
+```
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-pts_vs_market_value
+#| fig-cap: Scatter plot demonstrating the correlation between the current market value of teams and their accumulated league points for the 2023-2024 season. The scatter plot places each team by the total points they have secured on the x-axis against their market value on the y-axis. A pronounced upward trend represented by the linear regression line, with a correlation coefficient of 0.849962012423038, indicates a strong positive relationship. This suggests that teams with higher market values tend to amass more league points, underlining a potential link between financial strength and on-field success.
+
+# Calculate correlation coefficient for league position and market value
+cor_market <- cor(analysis_data$pts, analysis_data$market_value, use = "complete.obs")
+
+# Create a scatter plot for league position and market value
+ggplot(analysis_data, aes(x = pts, y = market_value)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Figure 4: Current Market Value in Relation 
+       to League Points for the 2023-2024 Season",
+       subtitle = paste("Correlation coefficient:", cor_market),
+       x = "Total League Points",
+       y = "Total Market Value")
+```
+
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-pts_vs_transfer_fees
+#| fig-cap: Scatter plot illustrating the relationship between teams total transfer spending and their corresponding league points for the 2023-2024 season. The scatter plot shows each team as a distinct point, positioned by their total league points on the x-axis and their transfer spending on the y-axis. The trend line, calculated with linear regression, indicates a moderate positive correlation, with a correlation coefficient of approximately 0.417985956450557. This suggests that higher league points tend to coincide with increased transfer spending, although the relationship is not strongly linear.
+
+# Calculate correlation coefficient for league position and total transfer fees
+cor_transfers <- cor(analysis_data$pts, analysis_data$transfer_fees, use = "complete.obs")
+
+# Create a scatter plot for league position and average total wages
+ggplot(analysis_data, aes(x = pts, y = transfer_fees)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Figure 3: Average Transfer Spending in Relation to 
+       League Points for the 2023-2024 Season",
+       subtitle = paste("Correlation coefficient:", cor_transfers),
+       x = "Total League Points",
+       y = "Total Transfer Fees")
+```
+
 
 # Model
 
