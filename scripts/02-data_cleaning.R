@@ -11,6 +11,7 @@
 library(tidyverse)
 library(readr)
 library(dplyr)
+library(arrow)
 
 #### Clean data ####
 # Load the matchday attendance dataset from a CSV file that shows every teams average home matchday attendace for the 2023-2024 season
@@ -51,5 +52,5 @@ head(analysis_data)
 
 #### Save data ####
 write_csv(analysis_data, "data/analysis_data/analysis_data.csv")
-
+write_parquet(analysis_data, "data/analysis_data/analysis_data.parquet")
 

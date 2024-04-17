@@ -9,41 +9,92 @@
 
 
 #### Workspace setup ####
-library(tidyverse)
-library(ggplot2)
-library(corrplot)
 
+# Install and load necessary packages
+install.packages("lintr")
+install.packages("dplyr")
+install.packages("ggplot2")
+library(lintr)
+library(dplyr)
+library(ggplot2)
+
+# Lint the script for style consistency
+lintr::lint("scripts/00-simulate_data.R")
+
+#### Build simulated data ####
+
+# Setting seed for reproducibility
+set.seed(500)
 
 #### Simulate data ####
-set.seed(123) # Setting seed for reproducibility
 
-# Calculate correlation matrix
-cor_matrix <- cor(merged_data |> select(where(is.numeric)), use = "complete.obs")
-print(cor_matrix)
+# Simulate data for sports teams
+simulated_team_data <-
+  tibble(
+    sim_team_id = sample(x = 1:20, size = 20, replace = FALSE),
+    sim_pts = round(rnorm(20, mean=50, sd=15)),
+    sim_average_home_matchday_attendance = round(rnorm(20, mean=30000, sd=5000)),
+    sim_total_wage_bill = round(rnorm(20, mean=80000000, sd=20000000)),
+    sim_market_value = round(rnorm(20, mean=500000000, sd=150000000)),
+    sim_transfer_fees = round(rnorm(20, mean=100000000, sd=30000000))
+  )
 
-# Generate corrplot 
-corrplot(cor_matrix, method = "circle", type = "upper", order = "hclust",
-         tl.col = "black", tl.srt = 90)
+# Arrange data by team ID
+simulated_team_data <- 
+  simulated_team_data |>
+  arrange(sim_team_id)
 
-ggplot(merged_data, aes(x = win_rate_first6, y = win_rate_season)) +
+#### Graph simulated data ####
+
+# Points vs. Average Matchday Attendance
+simulated_team_data |>
+  ggplot(aes(x = sim_pts, y = sim_average_home_matchday_attendance)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE, color = "blue") +
-  labs(title = "Comparison of Win Rates",
-       x = "Win Rate in First 6 Games",
-       y = "Overall Season Win Rate")
+  geom_smooth(method = "lm", color = "blue") +
+  theme_minimal() +
+  labs(title = "Points vs. Average Matchday Attendance",
+       x = "Total League Points", y = "Average Home Matchday Attendance")
 
-ggplot(merged_data, aes(x = factor(season), y = pts_pct_first6)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(title = "Percentage of Points Accumulated in First 6 Games by Season",
-       x = "Season",
-       y = "Percentage of Points") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# Points vs. Total Wage Bill
+simulated_team_data |>
+  ggplot(aes(x = sim_pts, y = sim_total_wage_bill)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "red") +
+  theme_minimal() +
+  labs(title = "Points vs. Total Wage Bill",
+       x = "Total League Points", y = "Total Wage Bill")
 
-ggplot(merged_data, aes(x = goal_scoring_rate_first6, y = goal_conceding_rate_first6)) +
-  geom_point(aes(color = factor(season))) +
-  geom_smooth(method = "lm", se = FALSE, color = "red") +
-  labs(title = "Goal Scoring vs. Conceding Rate in First 6 Games",
-       x = "Goal Scoring Rate",
-       y = "Goal Conceding Rate") +
-  scale_color_discrete(name = "Season")
+# Points vs. Market Value
+simulated_team_data |>
+  ggplot(aes(x = sim_pts, y = sim_market_value)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "green") +
+  theme_minimal() +
+  labs(title = "Points vs. Market Value",
+       x = "Total League Points", y = "Market Value")
 
+# Points vs. Transfer Fees
+simulated_team_data |>
+  ggplot(aes(x = sim_pts, y = sim_transfer_fees)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "purple") +
+  theme_minimal() +
+  labs(title = "Points vs. Transfer Fees",
+       x = "Total League Points", y = "Transfer Fees")
+
+#### Test simulated data ####
+
+# Data validation checks
+checks <- list(
+  nrow(simulated_team_data) == 20,
+  all(simulated_team_data$sim_team_id >= 1 & simulated_team_data$sim_team_id <= 20),
+  range(simulated_team_data$sim_pts),
+  range(simulated_team_data$sim_average_home_matchday_attendance),
+  range(simulated_team_data$sim_total_wage_bill),
+  range(simulated_team_data$sim_market_value),
+  range(simulated_team_data$sim_transfer_fees)
+)
+
+if (any(!unlist(checks))) {
+  print("There are errors in the simulated data")
+}
