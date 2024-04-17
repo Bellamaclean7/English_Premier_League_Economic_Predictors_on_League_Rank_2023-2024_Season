@@ -47,6 +47,12 @@ analysis_data$market_value <- as.numeric(analysis_data$market_value)
 analysis_data <- analysis_data |>
   select(-active.palyers, -forwards, -midfielders, -defensmen, -goalkeepers)
 
+# Scale the total_wage_bill by dividing by 1 billion to match the market_value scale
+analysis_data$total_wage_bill <- analysis_data$total_wage_bill / 1e9
+
+# Scale the transfer_fees by dividing by 1 billion to match the market_value scale
+analysis_data$transfer_fees <- analysis_data$transfer_fees / 1e9
+
 # Inspect the dataset
 head(analysis_data)
 
