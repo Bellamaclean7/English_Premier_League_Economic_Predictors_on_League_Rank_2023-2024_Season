@@ -409,13 +409,17 @@ F-statistic: 22.12 on 3 and 16 DF,  p-value: 6.159e-06
 # Predict points using the model
 analysis_data$predicted_pts <- predict(model, newdata = analysis_data)
 
-# Display actual vs predicted points sorted by actual points descending
+# Selecting the necessary columns and renaming them
 result_table <- analysis_data |> 
   select(team, pts, predicted_pts) |>
-  arrange(desc(pts))
+  rename(Team = team, Points = pts, `Predicted Points` = predicted_pts) |>
+  arrange(desc(Points))
+
+# Round predicted points to the nearest whole number
+result_table$`Predicted Points` <- round(result_table$`Predicted Points`, 0)
 
 # Format table with LaTeX and apply additional styling
-kable(result_table, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+kable(result_table, booktabs = TRUE, align = c("l", "r", "r"), "latex", longtable = TRUE) |>
   kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
 ```
 
