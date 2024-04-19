@@ -30,6 +30,7 @@ library(kableExtra)
 library(scales)
 library(ggplot2)
 library(rstanarm)
+library(ggrepel)
 
 analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 show_col_types = FALSE
