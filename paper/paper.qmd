@@ -303,7 +303,7 @@ ggplot(analysis_data, aes(x = pts, y = transfer_fees)) +
        y = "Total Transfer Fees")
 ```
 
-In @fig-pts_vs_average_home_matchday_attendance, @fig-pts_vs_total_wage_bill, @fig-pts_vs_market_value, and @fig-pts_vs_transfer_fees, each point point on the graph represents a team, plotted with their total points on the x-axis and their average home attendance on the y-axis. The trend line in @fig-pts_vs_average_home_matchday_attendance, added using linear regression analysis, suggests a correlation between team performance and matchday turnout. The correlation coefficient of 0.694060419947882 indicates a positive association with moderate correlation, where teams with higher league points tend to have greater average attendance. @fig-pts_vs_total_wage_bill linear regression trend line suggests a correlation between a team’s financial expenditure on payroll and their success in the league. A correlation coefficient of 0.770829037567151 reflects a positive relationship, implying that teams with higher payrolls may be more likely to accumulate greater league points. @fig-pts_vs_market_value demonstrates a pronounced upward trend represented by the linear regression line, with a correlation coefficient of 0.849962012423038, indicative of a strong positive relationship. This suggests that teams with higher market values tend to amass more league points, underlining a potential link between financial strength and on-field success. @fig-pts_vs_transfer_fees trend line indicates a moderate positive correlation, with a correlation coefficient of approximately 0.417985956450557. This suggests that higher league points tend to coincide with increased transfer spending, although the relationship is not strongly linear.
+In @fig-pts_vs_average_home_matchday_attendance, @fig-pts_vs_total_wage_bill, @fig-pts_vs_market_value, and @fig-pts_vs_transfer_fees, each point point on the graph represents a team, plotted with their total points on the x-axis and their average home attendance on the y-axis. The trend line in @fig-pts_vs_average_home_matchday_attendance, added using linear regression analysis, suggests a correlation between team performance and matchday turnout. The correlation coefficient of 0.683116662462212 indicates a positive association with moderate correlation, where teams with higher league points tend to have greater average attendance. @fig-pts_vs_total_wage_bill linear regression trend line suggests a correlation between a team’s financial expenditure on payroll and their success in the league. A correlation coefficient of 0.788682340622421 reflects a positive relationship, implying that teams with higher payrolls may be more likely to accumulate greater league points. @fig-pts_vs_market_value demonstrates a pronounced upward trend represented by the linear regression line, with a correlation coefficient of 0.88165690596531, indicative of a strong positive relationship. This suggests that teams with higher market values tend to amass more league points, underlining a potential link between financial strength and on-field success. @fig-pts_vs_transfer_fees trend line indicates a moderate positive correlation, with a correlation coefficient of approximately 0.449012469460392. This suggests that higher league points tend to coincide with increased transfer spending, although the relationship is not strongly linear.
 
 When running simple linear regression with `Points` ~ `Each Dependent Variable`, you're looking at the relationship between each variable in isolation with `Points`. The positive trend and strong correlation coefficients found in @fig-pts_vs_average_home_matchday_attendance, @fig-pts_vs_total_wage_bill, @fig-pts_vs_market_value when analyzed in isolation with `Points`, suggests that as `Market Value`, `Total Payroll`, and `Average Matchday Attendance` of a team increases (independently from each other), so do the points accumulated.
 
@@ -360,11 +360,32 @@ A positive relationship is hypothesized between the dependent variable (`Points`
 # Results
 
 ```{r}
+#| echo: false
+#| warning: false
+
 model <- lm(pts ~ average_home_matchday_attendance + total_wage_bill + market_value, data = analysis_data)
 
 # Display the summary of the model
 model_summary <- summary(model)
 print(model_summary)
+```
+
+```{r}
+#| label: tbl-7
+#| tbl-cap: Summary of Linear Model Coefficients.
+#| echo: false
+#| warning: false
+
+model_summary <- summary(model)
+coefs <- data.frame(
+  Term = rownames(model_summary$coefficients),
+  Estimate = model_summary$coefficients[, "Estimate"],
+  StdError = model_summary$coefficients[, "Std. Error"],
+  tValue = model_summary$coefficients[, "t value"],
+  Pr = model_summary$coefficients[, "Pr(>|t|)"]
+)
+kable(coefs, caption = "Summary of Linear Model Coefficients", format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
 ```
 
