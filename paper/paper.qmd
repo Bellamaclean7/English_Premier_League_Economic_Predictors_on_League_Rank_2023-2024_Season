@@ -359,9 +359,11 @@ A positive relationship is hypothesized between the dependent variable (`Points`
 
 # Results
 
+@tbl-7 shows the table of the coefficients after running the linear model summary.
 ```{r}
 #| echo: false
 #| warning: false
+#| results: 'hide'
 
 model <- lm(pts ~ average_home_matchday_attendance + total_wage_bill + market_value, data = analysis_data)
 
@@ -372,22 +374,31 @@ print(model_summary)
 
 ```{r}
 #| label: tbl-7
-#| tbl-cap: Summary of Linear Model Coefficients.
+#| tbl-cap: Summary of Linear Model Coefficients
 #| echo: false
 #| warning: false
 
 model_summary <- summary(model)
 coefs <- data.frame(
-  Term = rownames(model_summary$coefficients),
   Estimate = model_summary$coefficients[, "Estimate"],
   StdError = model_summary$coefficients[, "Std. Error"],
   tValue = model_summary$coefficients[, "t value"],
   Pr = model_summary$coefficients[, "Pr(>|t|)"]
 )
-kable(coefs, caption = "Summary of Linear Model Coefficients", format = "html") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+kable(coefs, format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
 
 ```
+
+Note:
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.8121  -6.0644  -0.9837   5.1376  15.9644 
+
+Residual standard error: 8.261 on 16 degrees of freedom
+Multiple R-squared:  0.8057,	Adjusted R-squared:  0.7693 
+F-statistic: 22.12 on 3 and 16 DF,  p-value: 6.159e-06
 
 # Discussion
 
