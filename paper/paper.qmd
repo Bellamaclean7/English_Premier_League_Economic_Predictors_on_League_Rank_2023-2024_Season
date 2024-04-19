@@ -402,7 +402,7 @@ F-statistic: 22.12 on 3 and 16 DF,  p-value: 6.159e-06
 
 ```{r}
 #| label: tbl-8
-#| tbl-cap: Actual vs Predicted Points for English Premier League Teams Based on Home Attendance, Wage Bill, and Market Value, Sorted by Current League Ranking in Descending Order
+#| tbl-cap: Actual vs Predicted Points for English Premier League Teams Based on Home Attendance, Total Payroll, and Market Value, Sorted by Current League Ranking in Descending Order
 #| echo: false
 #| warning: false
 
@@ -420,6 +420,41 @@ result_table$`Predicted Points` <- round(result_table$`Predicted Points`, 0)
 
 # Format table with LaTeX and apply additional styling
 kable(result_table, booktabs = TRUE, align = c("l", "r", "r"), "latex", longtable = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
+```
+
+```{r}
+#| label: tbl-9
+#| tbl-cap: Actual Rank vs Predicted Rank Based on Home Attendance, Total Payroll, and Market Value for English Premier League Teams
+#| echo: false
+#| warning: false
+
+# Add predicted points to 'analysis_data'
+analysis_data$predicted_pts <- predict(model, newdata = analysis_data)
+
+# Prepare the predicted rankings
+predicted_table <- analysis_data |>
+  arrange(desc(predicted_pts)) |>  # Sort by predicted points in descending order
+  mutate(predicted_rank = row_number()) |>  # Assign ranking based on predicted points
+  select(team, predicted_rank) |>
+  rename(`Predicted Standings` = team, `Predicted Rank` = predicted_rank)
+
+# Prepare the actual rankings
+actual_table <- analysis_data |>
+  arrange(desc(pts)) |>  # Sort by actual points in descending order
+  mutate(actual_rank = row_number()) |>  # Assign ranking based on actual points
+  select(team, actual_rank) |>
+  rename(`Actual Standings` = team, `Rank` = actual_rank)
+
+# Merge both tables based on rank
+result_table <- merge(actual_table, predicted_table, by.x = "Rank", by.y = "Predicted Rank")
+
+# Select only the desired columns: Rank, Actual Standings, and Predicted Standings
+final_result <- result_table |>
+  select(Rank, `Actual Standings`, `Predicted Standings`)
+
+# Format table with LaTeX and apply additional styling
+kable(final_result, booktabs = TRUE, align = c("r", "l", "l"), "latex", longtable = TRUE) |>
   kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
 ```
 
