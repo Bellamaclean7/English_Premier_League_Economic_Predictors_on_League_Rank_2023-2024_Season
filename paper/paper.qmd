@@ -363,7 +363,7 @@ A positive relationship is hypothesized between the dependent variable (`Points`
 ```{r}
 #| echo: false
 #| warning: false
-#| results: 'hide'
+#| include: false
 
 model <- lm(pts ~ average_home_matchday_attendance + total_wage_bill + market_value, data = analysis_data)
 
@@ -386,7 +386,7 @@ coefs <- data.frame(
   Pr = model_summary$coefficients[, "Pr(>|t|)"]
 )
 
-kable(coefs, format = "latex", booktabs = TRUE) |>
+kable(coefs, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
   kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
 
 ```
@@ -399,6 +399,25 @@ Residuals:
 Residual standard error: 8.261 on 16 degrees of freedom
 Multiple R-squared:  0.8057,	Adjusted R-squared:  0.7693 
 F-statistic: 22.12 on 3 and 16 DF,  p-value: 6.159e-06
+
+```{r}
+#| label: tbl-8
+#| tbl-cap: Actual vs Predicted Points for English Premier League Teams Based on Home Attendance, Wage Bill, and Market Value, Sorted by Current League Ranking in Descending Order
+#| echo: false
+#| warning: false
+
+# Predict points using the model
+analysis_data$predicted_pts <- predict(model, newdata = analysis_data)
+
+# Display actual vs predicted points sorted by actual points descending
+result_table <- analysis_data |> 
+  select(team, pts, predicted_pts) |>
+  arrange(desc(pts))
+
+# Format table with LaTeX and apply additional styling
+kable(result_table, booktabs = TRUE, align = c("l", rep("r", 6)), "latex", longtable = TRUE) |>
+  kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
+```
 
 # Discussion
 
