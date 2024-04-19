@@ -424,6 +424,50 @@ kable(result_table, booktabs = TRUE, align = c("l", "r", "r"), "latex", longtabl
 ```
 
 ```{r}
+#| warning: false
+#| echo: false
+#| label: fig-actual_pts_vs_predicted_pts
+#| fig-cap: A double bar graph comparing the actual and predicted points for teams in the English Premier League. Points predicted by a statistical model are plotted alongside the points actually obtained by the teams to evaluate the models accuracy. The teams are arranged on the x-axis in descending order of their actual points, and two sets of bars represent the actual (in blue) and predicted (in red) points for each team, allowing for a direct side-by-side comparison between the models predictions and real-world outcomes.
+
+# Add predicted points to 'analysis_data'
+analysis_data$predicted_pts <- predict(model, newdata = analysis_data)
+
+# Prepare the predicted rankings with points
+predicted_table <- analysis_data |>
+  arrange(desc(predicted_pts)) |>
+  mutate(predicted_rank = row_number(), `Predicted Points` = predicted_pts) |>
+  select(team, predicted_rank, `Predicted Points`)
+
+# Prepare the actual rankings with points
+actual_table <- analysis_data |>
+  arrange(desc(pts)) |>
+  mutate(actual_rank = row_number(), `Actual Points` = pts) |>
+  select(team, actual_rank, `Actual Points`)
+
+# Merge both tables based on team
+result_table <- merge(actual_table, predicted_table, by = "team")
+
+# Reorder the team factor levels based on actual points
+result_table$team <- with(result_table, reorder(team, -`Actual Points`))
+
+# Reshape data to long format for ggplot after reordering
+long_data <- result_table |>
+  gather(key = "Type", value = "Points", `Actual Points`, `Predicted Points`)
+
+# Create the double bar graph using the reshaped and ordered data
+ggplot(long_data, aes(x = team, y = Points, fill = Type)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.7), width = 0.3) +
+  scale_fill_manual(values = c("Actual Points" = "blue", "Predicted Points" = "red"),
+                    labels = c("Actual Points", "Predicted Points")) +
+  labs(title = "Comparison of Actual and Predicted Points for EPL Teams",
+       x = "Team",
+       y = "Points",
+       fill = "") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6)) +
+  theme(legend.position = "top")
+```
+
+```{r}
 #| label: tbl-9
 #| tbl-cap: Actual Rank vs Predicted Rank Based on Home Attendance, Total Payroll, and Market Value for English Premier League Teams
 #| echo: false
