@@ -401,6 +401,10 @@ Residual standard error: 8.261 on 16 degrees of freedom
 Multiple R-squared:  0.8057,	Adjusted R-squared:  0.7693 
 F-statistic: 22.12 on 3 and 16 DF,  p-value: 6.159e-06
 
+The results from the linear regression model indicate a strong relationship between points earned by English Premier League teams and variables such as average home matchday attendance, total wage bill, and market value. The model explains a significant portion of the variability in points, with an \( R^2 \) value of 0.8057, suggesting that about 80.57% of the variation in team points can be accounted for by these three predictors. Market value is particularly impactful, as indicated by a statistically significant positive coefficient ( \( p \) = 0.00151), suggesting that higher market values are associated with higher points. Conversely, the coefficient for the total wage bill is negative, though not statistically significant, hinting that higher wage bills might not necessarily translate into better performance. This is somewhat surprising, however, results could stem from market value being such a strong predictor that is overshadows the impactfulness of total wage bill. Attendance shows a positive but non-significant impact on points. The model's residuals indicate some deviation from perfect prediction, with values ranging from -10.81 to 15.96, suggesting variability that the model doesn’t capture. Overall, the significant \( p \)-value for the model (6.159e-06) confirms the effectiveness of these predictors in forecasting league points and therefore the confirmation to move forward in the analysis. 
+
+@tbl-8 shows the actual and predicted performance of English Premier League teams for the 2023-2024. Each row of the table corresponds to a different team and lists three key pieces of information: the team's name, their actual points accumulated in the league as of Matchday 33, and their predicted points, which are calculated based on variables such as home attendance, total payroll, and market value. The teams are sorted by their actual points in descending order, showcasing the teams with higher performance at the top of the table.
+
 ```{r}
 #| label: tbl-8
 #| tbl-cap: Actual vs Predicted Points for English Premier League Teams Based on Home Attendance, Total Payroll, and Market Value, Sorted by Current League Ranking in Descending Order
@@ -424,11 +428,12 @@ kable(result_table, booktabs = TRUE, align = c("l", "r", "r"), "latex", longtabl
   kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
 ```
 
+@fig-actual_pts_vs_predicted_pts compares actual league points as of Matchday 33 of the 2023-2024 English Premier League season to predicted league points after Matchday 38 (end of season). Points predicted by the linear regression model are plotted alongside the points actually obtained by the teams to evaluate the models accuracy. The teams are arranged on the x-axis in descending order of their actual points, and two sets of bars represent the actual (in blue) and predicted (in red) points for each team, allowing for a direct side-by-side comparison between the models predictions and real-world outcomes.
 ```{r}
 #| warning: false
 #| echo: false
 #| label: fig-actual_pts_vs_predicted_pts
-#| fig-cap: A double bar graph comparing the actual and predicted points for teams in the English Premier League. Points predicted by a statistical model are plotted alongside the points actually obtained by the teams to evaluate the models accuracy. The teams are arranged on the x-axis in descending order of their actual points, and two sets of bars represent the actual (in blue) and predicted (in red) points for each team, allowing for a direct side-by-side comparison between the models predictions and real-world outcomes.
+#| fig-cap: A double bar graph comparing the actual and predicted points for teams in the English Premier League.
 
 # Add predicted points to 'analysis_data'
 analysis_data$predicted_pts <- predict(model, newdata = analysis_data)
@@ -468,6 +473,7 @@ ggplot(long_data, aes(x = team, y = Points, fill = Type)) +
   theme(legend.position = "top")
 ```
 
+@tbl-9 presents a comparative analysis of the rankings of English Premier League teams, juxtaposing their actual standings against their predicted standings. The prediction is derived from Equation (2) that incorporates variables such as home attendance, total payroll, and market value. Each row in the table features a rank number, followed by the actual team standing corresponding to that rank, and the predicted team standing that would occupy the same rank based on the model's calculations. This layout allows for a direct comparison of where teams are predicted to stand based on certain metrics versus where they actually stand in the league, highlighting the predictive model's accuracy and identifying discrepancies between expected and actual performances. 
 ```{r}
 #| label: tbl-9
 #| tbl-cap: Actual Rank vs Predicted Rank Based on Home Attendance, Total Payroll, and Market Value for English Premier League Teams
