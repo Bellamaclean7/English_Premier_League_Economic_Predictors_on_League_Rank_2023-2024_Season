@@ -10,12 +10,8 @@
 
 #### Download data ####
 
-
-
-
-#### Save data ####
-# [...UPDATE THIS...]
-# change the_raw_data to whatever name you assigned when you downloaded it.
-write_csv(the_raw_data, "inputs/data/raw_data.csv") 
-
-         
+## Average home matchday attendance data downloaded from: https://www.footballwebpages.co.uk/premier-league/attendances/2022-2023
+## Current market value downloaded from: https://www.transfermarkt.us/premier-league/daten/wettbewerb/GB1
+## Total payroll downloaded from: https://www.spotrac.com/epl/payroll/
+## Total transfer fees downloaded from: https://www.spotrac.com/epl/payroll/
+## League standings downloaded from: https://www.transfermarkt.us/premier-league/daten/wettbewerb/GB1
