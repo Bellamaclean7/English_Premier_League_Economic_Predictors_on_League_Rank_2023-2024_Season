@@ -2,7 +2,7 @@
 
 ## Overview
 
-This paper reatures an analysis of English Premier League teams rank and team wealth. The final `PDF` report ([link here])(https://github.com/Bellamaclean7/English_Premier_League_Economic_Predictors_on_League_Rank_2023-2024_Season/blob/main/paper/paper.pdf) analyzes the relationship between three explanatory variables: match attendance, total payroll, and market value, and teams total points accumulated during the English Premier League 2023-2024 season. Findings suggest that each explanatory variable significantly influences a team's league position (total points), highlighting the association between team success and team wealth.
+This paper reatures an analysis of English Premier League teams rank and team wealth. The final `PDF` report [link here](https://github.com/Bellamaclean7/English_Premier_League_Economic_Predictors_on_League_Rank_2023-2024_Season/blob/main/paper/paper.pdf) analyzes the relationship between three explanatory variables: match attendance, total payroll, and market value, and teams total points accumulated during the English Premier League 2023-2024 season. Findings suggest that each explanatory variable significantly influences a team's league position (total points), highlighting the association between team success and team wealth.
 
 ## File Structure
 
