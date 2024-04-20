@@ -1,5 +1,5 @@
 ---
-title: " Total Team Spending and Profitability Results in a Higher League Ranking in the English Premier League"
+title: "Total Team Spending and Profitability Results in a Higher League Ranking in the English Premier League"
 subtitle: "An Analysis of Economic Predictors on League Rank in the 2023-2024 Season"
 author: 
   - Isabella MacLean
