@@ -7,7 +7,7 @@ thanks: "Code and data are available at: https://github.com/Bellamaclean7/Englis
 _Predictors_on_League_Rank_2023-2024_Season.git."
 date: today
 date-format: long
-abstract: "This project investigates how to formulate a linear regression model based on three explanatory variables: match attendance, total payroll, and market value, in order to try and predict a teams finishing place in the standings. Utilizing R's lm function, this paper analyzes the relationship between these variables and teams total points accumulated during the English Premier League 2023-2024 season. Findings suggest that each explanatory variable significantly influences a team's league position (total points), highlighting the association between team success and team wealth."
+abstract: "This paper uses a linear regression model to predict English Premier League teams rank in the standings based on three explanatory variables: match attendance, total payroll, and market value. Utilizing R's lm function, this paper analyzes the relationship between these variables and teams total points accumulated during the English Premier League 2023-2024 season. Findings suggest that each explanatory variable significantly influences a team's league position (total points), highlighting the association between team success and team wealth."
 format: pdf
 toc: true
 number-sections: true
@@ -178,7 +178,7 @@ The resulting dataset for analysis is shown in @tbl-6.
 
 ```{r}
 #| label: tbl-6
-#| tbl-cap: The dataset containing the total points earned by each team in the English Premier League during the 2023-2024 as of Matchday 30.
+#| tbl-cap: The dataset containing the total points earned by each team in the English Premier League during the 2023-2024 as of Matchday 33.
 #| echo: false
 #| warning: false
 
@@ -223,7 +223,7 @@ ggplot(analysis_data, aes(x = pts, y = average_home_matchday_attendance)) +
         axis.title.x = element_text(size = 8),
         axis.title.y = element_text(size = 8)
   ) +
-  labs(title = "Average Matchday Attendance in Relation to League Position - 2023/2024 Season",
+  labs(title = "Average Matchday Attendance in Relation to League Position",
        subtitle = sprintf("Correlation coefficient: %.15f", cor_attendance),
        x = "Total League Points",
        y = "Average Attendance"
@@ -250,7 +250,7 @@ ggplot(analysis_data, aes(x = pts, y = total_wage_bill)) +
       axis.title.x = element_text(size = 8),  
       axis.title.y = element_text(size = 8)
   ) +
-  labs(title = "Total Payroll in Relation to League Points - 2023/2024 Season",
+  labs(title = "Total Payroll in Relation to League Point",
        subtitle = paste("Correlation coefficient:", cor_wages),
        x = "Total League Points",
        y = "Total Payroll")
@@ -275,7 +275,7 @@ ggplot(analysis_data, aes(x = pts, y = market_value)) +
     axis.title.x = element_text(size = 8),  
     axis.title.y = element_text(size = 8)
   ) +
-  labs(title = "Current Market Value in Relation to League Points - 2023/2024 Season",
+  labs(title = "Current Market Value in Relation to League Points",
        subtitle = paste("Correlation coefficient:", cor_market),
        x = "Total League Points",
        y = "Total Market Value")
@@ -300,7 +300,7 @@ ggplot(analysis_data, aes(x = pts, y = transfer_fees)) +
     axis.title.x = element_text(size = 8),  
     axis.title.y = element_text(size = 8)
   ) +
-  labs(title = "Average Transfer Spending in Relation to League Points - 2023/2024 Season",
+  labs(title = "Average Transfer Spending in Relation to League Points",
        subtitle = paste("Correlation coefficient:", cor_transfers),
        x = "Total League Points",
        y = "Total Transfer Fees")
@@ -597,6 +597,9 @@ The results of the current analysis could lead to an intriguing dimension of fin
 
 ## Model Summary
 ```{r}
+#| warning: false
+#| echo: false
+
 model <- lm(pts ~ average_home_matchday_attendance + total_wage_bill + market_value, data = analysis_data)
 
 # Display the summary of the model
@@ -606,18 +609,16 @@ print(model_summary)
 
 ## Posterior predictive check
 
+@fig-fosterior_predictive_check Conduct a simulation-based approach to assess how well the model can predict new data. First new datasets were created by adding randomly sampled residuals (differences between observed and model-predicted values) to the fitted values from the model. Sampling residuals allows me to include the natural variability and error structure of the model in the simulated data. I do this many times (1000 simulations), each time generating a full set of predicted points based on your model but incorporating different sampled residuals. Then calculate the mean and quantile intervals (e.g., 95% confidence intervals) for these simulated points. These statistics are used to see how the simulated data (predictions) compare against the actual data. Mean of simulations represents the average predicted points from all simulations for each team. Confidence intervals give a range where you expect the true value of the teams points to fall, based on the models predictions and its inherent uncertainty. The final step involves plotting the actual points against the mean of the simulated points for each team. This visualization checks model validity. If the model is good, most actual points should lie within the plotted confidence intervals of the simulated means. It also assesses prediction accuracy. The closer these points lie along the diagonal line (where actual equals predicted), the better your model is at accurately predicting the points.
+
 ```{r}
 #| warning: false
 #| echo: false
 #| label: fig-fosterior_predictive_check
-#| fig-cap: Conducting a simulation-based approach to assess how well the model can predict new data. First created new datasets by adding randomly sampled residuals (differences between observed and model-predicted values) to the fitted values from the model. Sampling residuals allows me to include the natural variability and error structure of the model in the simulated data. I do this many times (1000 simulations), each time generating a full set of predicted points based on your model but incorporating different sampled residuals. Then calculate the mean and quantile intervals (e.g., 95% confidence intervals) for these simulated points. These statistics are used to see how the simulated data (predictions) compare against the actual data. Mean of simulations represents the average predicted points from all simulations for each team. Confidence intervals give a range where you expect the true value of the teams points to fall, based on the models predictions and its inherent uncertainty. The final step involves plotting the actual points against the mean of the simulated points for each team. This visualization checks model validity. If the model is good, most actual points should lie within the plotted confidence intervals of the simulated means. It also assesses prediction accuracy. The closer these points lie along the diagonal line (where actual equals predicted), the better your model is at accurately predicting the points.
+#| fig-cap: Conducting a simulation-based approach to assess how well the model can predict new data.
 
 # Fit the linear regression model
 model <- lm(pts ~ average_home_matchday_attendance + total_wage_bill + market_value, data = analysis_data)
-
-# Display the summary of the model
-model_summary <- summary(model)
-print(model_summary)
 
 # Simulate posterior predictive data
 set.seed(123)  # for reproducibility
