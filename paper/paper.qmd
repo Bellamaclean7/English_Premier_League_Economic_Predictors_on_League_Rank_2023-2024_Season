@@ -72,7 +72,9 @@ The remainder of this paper is structured as follows. @sec-data....
 
 # Data {#sec-data}
 
-The analysis dataset used for this paper is comprised of five datasets that were compiled during the data cleaning process. The first dataset, @tbl-1, contains every teams average home matchday attendance for the 2023-2024 season, which was collected from @footballwebpages2023premierleague. The second dataset, @tbl-2, contains every teams current market value, which was collected from @transfermarkt2023premierleague. The third dataset, @tbl-3, contains the current total payroll for each team in the English Premier League, and was collected from @spotrac2023eplpayroll. The forth dataset, @tbl-4, contains the total amount spent in transfer fees prior to the start of the 2023-2024 season for each team in the English Premier League, and was collected from @spotrac2023epltransferfees. The final dataset, @tbl-5, contains the total points earned by each team in the English Premier League during the 2023-2024 as of Matchday 30, and was retrieved from @transfermarkt2023premierleaguematchday30.
+Data was collected and analyzed using the statistical programming software R [@citeR], with additional support from `tidyverse` [@tidyverse2023], `ggplot2` [@ggplot22023], `dplyr` [@dplyr2023], `readr` [@readr2023], `KableExtra` [@kableExtra2023], `knitr` [@knitr2023], `rstanarm` [@rstanarm2023], and `corrplot` [@corrplot2023].
+
+The analysis dataset used for this paper is comprised of five datasets that were compiled during the data cleaning process. The first dataset, @tbl-1, contains every teams average home matchday attendance for the 2023-2024 season, which was collected from @footballwebpages2023premierleague. The second dataset, @tbl-2, contains every teams current market value, which was collected from @transfermarkt2023premierleague. The third dataset, @tbl-3, contains the current total payroll for each team in the English Premier League, and was collected from @spotrac2023eplpayroll. The forth dataset, @tbl-4, contains the total amount spent in transfer fees prior to the start of the 2023-2024 season for each team in the English Premier League, and was collected from @spotrac2023epltransferfees. The final dataset, @tbl-5, contains the total points earned by each team in the English Premier League during the 2023-2024 as of Matchday 33, and was retrieved from @transfermarkt2023premierleaguematchday30.
 
 ```{r}
 #| label: tbl-1
@@ -358,7 +360,7 @@ The linear regression model given by Equation (2), derived from the foundational
 
 A positive relationship is hypothesized between the dependent variable (`Points`) and the three independent variables (`Home Matchday Attendance`, `Total Payroll`, and `Market Value`). The underlying assumption is that higher values for these independent variables should correlate with an increased number of points earned by a team. Such a correlation would suggest that greater fan engagement (as reflected in matchday attendance), higher investment in player talent (as indicated by the payroll), and a more substantial market presence (denoted by market value) are all strategic levers that could lead to better performance in the league.
 
-# Results
+# Results {#sec-results}
 
 @tbl-7 shows the table of the coefficients after running the linear model summary.
 ```{r}
@@ -401,7 +403,7 @@ Residual standard error: 8.261 on 16 degrees of freedom
 Multiple R-squared:  0.8057,	Adjusted R-squared:  0.7693 
 F-statistic: 22.12 on 3 and 16 DF,  p-value: 6.159e-06
 
-The results from the linear regression model indicate a strong relationship between points earned by English Premier League teams and variables such as average home matchday attendance, total wage bill, and market value. The model explains a significant portion of the variability in points, with an \( R^2 \) value of 0.8057, suggesting that about 80.57% of the variation in team points can be accounted for by these three predictors. Market value is particularly impactful, as indicated by a statistically significant positive coefficient ( \( p \) = 0.00151), suggesting that higher market values are associated with higher points. Conversely, the coefficient for the total wage bill is negative, though not statistically significant, hinting that higher wage bills might not necessarily translate into better performance. This is somewhat surprising, however, results could stem from market value being such a strong predictor that is overshadows the impactfulness of total wage bill. Attendance shows a positive but non-significant impact on points. The model's residuals indicate some deviation from perfect prediction, with values ranging from -10.81 to 15.96, suggesting variability that the model doesn’t capture. Overall, the significant \( p \)-value for the model (6.159e-06) confirms the effectiveness of these predictors in forecasting league points and therefore the confirmation to move forward in the analysis. 
+The results from the linear regression model indicate a strong relationship between points earned by English Premier League teams and variables such as average home matchday attendance, total wage bill, and market value. The model explains a significant portion of the variability in points, with an $R^2$ value of 0.8057, suggesting that about 80.57% of the variation in team points can be accounted for by these three predictors. Market value is particularly impactful, as indicated by a statistically significant positive coefficient ($p = 0.00151$), suggesting that higher market values are associated with higher points. Conversely, the coefficient for the total wage bill is negative, though not statistically significant, hinting that higher wage bills might not necessarily translate into better performance. This is somewhat surprising, however, results could stem from market value being such a strong predictor that is overshadows the impactfulness of total wage bill. Attendance shows a positive but non-significant impact on points. The model's residuals indicate some deviation from perfect prediction, with values ranging from -10.81 to 15.96, suggesting variability that the model doesn’t capture. Overall, the significant $p$-value for the model (6.159e-06) confirms the effectiveness of these predictors in forecasting league points and therefore the confirmation to move forward in the analysis. 
 
 @tbl-8 shows the actual and predicted performance of English Premier League teams for the 2023-2024. Each row of the table corresponds to a different team and lists three key pieces of information: the team's name, their actual points accumulated in the league as of Matchday 33, and their predicted points, which are calculated based on variables such as home attendance, total payroll, and market value. The teams are sorted by their actual points in descending order, showcasing the teams with higher performance at the top of the table.
 
@@ -428,7 +430,7 @@ kable(result_table, booktabs = TRUE, align = c("l", "r", "r"), "latex", longtabl
   kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
 ```
 
-@fig-actual_pts_vs_predicted_pts compares actual league points as of Matchday 33 of the 2023-2024 English Premier League season to predicted league points after Matchday 38 (end of season). Points predicted by the linear regression model are plotted alongside the points actually obtained by the teams to evaluate the models accuracy. The teams are arranged on the x-axis in descending order of their actual points, and two sets of bars represent the actual (in blue) and predicted (in red) points for each team, allowing for a direct side-by-side comparison between the models predictions and real-world outcomes.
+@fig-actual_pts_vs_predicted_pts compares actual league points as of Matchday 33 of the 2023-2024 English Premier League season to predicted league points. Points predicted by the linear regression model are plotted alongside the points actually obtained by the teams to evaluate the models accuracy. The teams are arranged on the x-axis in descending order of their actual points, and two sets of bars represent the actual (in blue) and predicted (in red) points for each team, allowing for a direct side-by-side comparison between the models predictions and real-world outcomes.
 ```{r}
 #| warning: false
 #| echo: false
@@ -509,9 +511,67 @@ kable(final_result, booktabs = TRUE, align = c("r", "l", "l"), "latex", longtabl
   kable_styling(latex_options = c("striped", "HOLD_position"), font_size = 10)
 ```
 
+The top-performing teams are generally predicted quite accurately, with only slight deviations in rankings regarding the top 10 teams. The top three teams for both actual and predicted are identical. The results also correctly predict the worst teams in the league, accurately predicting the three teams at the bottom of the table, however, in a slightly different order then their actual rank. Although the model does accurately predict the weaker teams in the league, it is evident that the model expected more points to be accumulated by these teams then the actual points accumulated. @fig-actual_rank_vs_predicted_rank visualizes the results of @tbl-9 in a scatter plot.
+
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-actual_rank_vs_predicted_rank
+#| fig-cap: A scatter plot comparing actual and predicted rankings of English Premier League (EPL) teams.
+
+# Add predicted points to 'analysis_data'
+analysis_data$predicted_pts <- predict(model, newdata = analysis_data)
+
+# Prepare the predicted rankings
+predicted_table <- analysis_data |>
+  arrange(desc(predicted_pts)) |>
+  mutate(predicted_rank = row_number()) |>
+  select(team, predicted_rank)
+
+# Prepare the actual rankings
+actual_table <- analysis_data |>
+  arrange(desc(pts)) |>
+  mutate(actual_rank = row_number()) |>
+  select(team, actual_rank)
+
+# Merge both tables
+result_table <- merge(actual_table, predicted_table, by = "team", suffixes = c(" Actual", " Predicted"))
+
+# Create a scatter plot with reversed scales and specified breaks
+plot <- ggplot(result_table, aes(x = actual_rank, y = predicted_rank, label = team)) +
+  geom_point(color = "blue", size = 4) +
+  geom_text_repel(size = 2,  # Adjust the size here
+                  box.padding = 0.4,  # Add padding around text
+                  point.padding = 0.7,  # Add space between text and points
+                  segment.color = 'grey50') +  # Color of the line connecting points and labels
+  labs(title = "Comparison of Actual vs. Predicted Ranks for EPL Teams",
+       x = "Actual Rank",
+       y = "Predicted Rank") +
+  theme_minimal() +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +  # Adds a reference line
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_x_reverse(breaks = 1:20) +  # Reverse X-axis with breaks every 1 increment
+  scale_y_reverse(breaks = 1:20)    # Reverse Y-axis with breaks every 1 increment
+
+# Print the plot
+print(plot)
+```
+
 # Discussion
 
-## First discussion point {#sec-first-point}
+The application of predictive analytics football, is an expanding field that can provide a competitive edge to clubs. This study aimed to correlate financial factors with team success highlighting the potential of data-driven decision-making in enhancing a team's competitive performance. The significant correlation between a team’s market value and league points serves as evidence of the tangible benefits that can be gained from predictive analytics
+
+The data presented in @sec-results indicates a general correlation between the predicted points, which take into account factors such as home attendance, payroll, and market value, and the actual points achieved by the teams in the English Premier League. As of Matchday 33, Most teams appear to be performing within a close range of their predicted outcomes, suggesting that the model used for predictions is fairly accurate or that most teams are performing as expected given their financial inputs.
+
+The results of the regression analysis underscore the substantial role that economic factors play in the performance of English Premier League teams. The robust association between market value and league points, in particular, confirms the prevailing notion that financial strength translates into competitive success. The unexpected negative coefficient for the total wage bill is one of the most interesting aspect of this analysis. While not statistically significant, the correlation raises questions about the efficiency and return on investment of high player salaries. It hints that simply spending more on player wages does not guarantee better outcomes, highlighting the complexity of financial management in football.
+
+## Analyzing Chelsea F.C.'s Underachievement: An Outlier Case Study
+
+Within the predictions lies a couple outliers, with Chelsea F.C. being the most notable. Chelsea's actual points stand at 47, while the model predicted they would have achieved 58 points by Matchday 33. This discrepancy of 11 points is significant and suggests that Chelsea F.C. is underperforming relative to its financial status. As a club known to have a substantial payroll and high market value, which are indicators of a team's wealth and resources available for acquiring talent, the expectation would be for Chelsea to secure a position closer to the top of the table.
+
+This outlier status of Chelsea F.C. draws attention and could prompt stakeholders to conduct a deeper analysis into why the club is not meeting the expectations set by its financial prowess. It raises questions about the efficacy of the investments made by the club and whether financial muscle is translating into performance on the pitch as anticipated. 
+
+Chelsea F.C.'s lower-than-expected league points despite its significant financial outlay exemplifies the multifaceted nature of football performance. The discrepancy between predicted and actual points for Chelsea F.C. is one of the largest among all teams, prompting a closer look at factors beyond the economic predictors used in this study. It serves as a reminder that team cohesion, tactical decisions, and possibly non-quantifiable elements such as team spirit and injuries can heavily influence results. As such, Chelsea F.C.'s example could be a launching pad for exploring the non-economic dimensions that interplay with financial resources to shape the fortunes of a football club.
 
 ## Second discussion point
 
@@ -519,20 +579,127 @@ kable(final_result, booktabs = TRUE, align = c("r", "l", "l"), "latex", longtabl
 
 ## Weaknesses and next steps
 
+While the linear regression model has demonstrated predictive strength, its limitations must be acknowledged. The study's primary limitation, though intentional, is its exclusive focus on financial predictors to forecast English Premier League performance. While such economic indicators are significant, they represent only a fraction of the factors that influence football outcomes. The model does not account for the strength of the coaching staff, the psychological state of players, injuries, weather conditions during matches, and other situational factors that could affect performance on a match-to-match basis. Furthermore, the analysis does not take into account the total payroll of coaching and managing staff, it strictly looks at players. 
+
+Another limitation is the scope of the study, which is restricted to the current season. This narrow time frame does not allow for the analysis of trends or the examination of the persistence of the identified relationships across different seasons. Football is a dynamic sport where teams' fortunes can fluctuate drastically from year to year; hence, a multi-season approach would most likely yield more robust insights.
+
+The sample size, constrained to the current teams in the Premier League for a single season, poses a further limitation. The relatively small dataset may not capture the full variability and could potentially overestimate or underestimate the effects of the predictors. Larger datasets that span multiple seasons and include teams from different tiers of English football might provide a more comprehensive view of the financial dynamics at play.
+
+The results of the current analysis could lead to an intriguing dimension of financial investment in European football as the next steps: the potential long-term benefits of allocating financial resources to youth development programs. While this analysis primarily examines current and direct financial factors of team success, there is growing evidence to suggest that investments in youth academies and development programs can be equally pivotal for sustained success. 
+
 \newpage
 
 \appendix
 
 # Appendix {-}
 
-
-# Additional data details
-
 # Model details {#sec-model-details}
+
+## Model Summary
+```{r}
+model <- lm(pts ~ average_home_matchday_attendance + total_wage_bill + market_value, data = analysis_data)
+
+# Display the summary of the model
+model_summary <- summary(model)
+print(model_summary)
+```
 
 ## Posterior predictive check
 
+```{r}
+#| warning: false
+#| echo: false
+#| label: fig-fosterior_predictive_check
+#| fig-cap: Conducting a simulation-based approach to assess how well the model can predict new data. First created new datasets by adding randomly sampled residuals (differences between observed and model-predicted values) to the fitted values from the model. Sampling residuals allows me to include the natural variability and error structure of the model in the simulated data. I do this many times (1000 simulations), each time generating a full set of predicted points based on your model but incorporating different sampled residuals. Then calculate the mean and quantile intervals (e.g., 95% confidence intervals) for these simulated points. These statistics are used to see how the simulated data (predictions) compare against the actual data. Mean of simulations represents the average predicted points from all simulations for each team. Confidence intervals give a range where you expect the true value of the teams points to fall, based on the models predictions and its inherent uncertainty. The final step involves plotting the actual points against the mean of the simulated points for each team. This visualization checks model validity. If the model is good, most actual points should lie within the plotted confidence intervals of the simulated means. It also assesses prediction accuracy. The closer these points lie along the diagonal line (where actual equals predicted), the better your model is at accurately predicting the points.
+
+# Fit the linear regression model
+model <- lm(pts ~ average_home_matchday_attendance + total_wage_bill + market_value, data = analysis_data)
+
+# Display the summary of the model
+model_summary <- summary(model)
+print(model_summary)
+
+# Simulate posterior predictive data
+set.seed(123)  # for reproducibility
+n_simulations <- 1000
+simulated_pts <- replicate(n_simulations, {
+  # Generate new response data by adding fitted values and sampled residuals
+  simulated_resid <- sample(residuals(model), size = length(fitted(model)), replace = TRUE)
+  fitted(model) + simulated_resid
+})
+
+# Calculate the mean and quantiles of the simulations for plotting
+simulated_mean <- rowMeans(simulated_pts)
+simulated_lower <- apply(simulated_pts, 1, quantile, probs = 0.025)
+simulated_upper <- apply(simulated_pts, 1, quantile, probs = 0.975)
+
+# Create a data frame for plotting
+posterior_data <- data.frame(
+  Team = rownames(analysis_data),
+  Actual = analysis_data$pts,
+  Fitted = fitted(model),
+  SimulatedMean = simulated_mean,
+  Lower95CI = simulated_lower,
+  Upper95CI = simulated_upper
+)
+
+# Plot actual vs. simulated data
+ggplot(posterior_data, aes(x = Actual, y = SimulatedMean)) +
+  geom_point(alpha = 0.5) +
+  geom_errorbar(aes(ymin = Lower95CI, ymax = Upper95CI), width = 0.1, alpha = 0.5) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  labs(x = "Actual Points", y = "Simulated Mean Points", title = "Posterior Predictive Check") +
+  theme_minimal()
+
+```
+
 ## Diagnostics
+
+```{r}
+#| warning: false
+#| echo: false
+
+library(ggplot2)
+library(car)
+library(lmtest)
+library(nortest)
+library(ggfortify)
+
+# Fit the model
+model <- lm(pts ~ average_home_matchday_attendance + total_wage_bill + market_value, data = analysis_data)
+
+# Residuals vs Fitted
+# This plot helps check for non-linear patterns and equal variance
+ggplot2::autoplot(model, which = 1)
+
+# Normal Q-Q Plot
+# This plot helps check the normality of residuals
+ggplot2::autoplot(model, which = 2)
+
+# Scale-Location Plot (Spread-Location)
+# This plot helps check for homoscedasticity
+ggplot2::autoplot(model, which = 3)
+
+# Residuals vs Leverage Plot
+# This helps identify influential cases
+ggplot2::autoplot(model, which = 5)
+
+# Additional Diagnostics
+
+# Test for Autocorrelation of residuals (Durbin-Watson test)
+dwtest(model)
+
+# Test for Normality of Residuals (Anderson-Darling test)
+ad.test(residuals(model))
+
+# Variance Inflation Factor (VIF) - checks for multicollinearity
+vif(model)  # from the car package
+
+# Print results
+print(dwtest(model))
+print(ad.test(residuals(model)))
+print(vif(model))
+```
 
 \newpage
 
