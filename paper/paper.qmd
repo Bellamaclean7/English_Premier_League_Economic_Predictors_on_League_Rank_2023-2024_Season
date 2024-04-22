@@ -51,24 +51,17 @@ total_transfer_spending <- read_csv(here::here("data/raw_data/total_transfer_spe
 show_col_types = FALSE
 ```
 
-
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+Established in 1992, the English Premier League comprises twenty clubs that compete annually, embarking on a 38 week season each August, each striving not only for the championship but also to avoid relegation. The English Premier League is the wealthiest football league globally, producing a total revenue of €10.5 billion as of the end of the 2022/2023 season [@EPLHistory]. Since the league began in 1992, only seven teams have come out victorious, with three of the seven teams only winning once (Leicester City 2015/16, Blackburn Rovers 1994/95 and Liverpool 2019/20) [@PremierLeagueExplained].
 
-The remainder of this paper is structured as follows. @sec-data....
+In the context of sports economics, understanding the economic factors that contribute to a team's success within such a wealthy league whose only ever had seven teams rise to the top may aid in understanding why teams like Manchester United (13 league titles), Manchester City (7 league titles), Chelsea (5 league titles), and Arsenal (3 league titles) continue to dominant the standings. 
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+This paper seeks to address a critical gap in existing research, which has often focused on immediate sporting outcomes rather than the underlying economic drivers that may predict long-term performance in the league standings and aid in understanding why only all a small number of teams have been able to win the English Premier League. Using a linear regression model, this analysis will predict English Premier League teams rank in the standings based on three economic explanatory variables: home matchday attendance, total payroll, and market value. Utilizing R's lm function, this paper analyzes the relationship between these variables and teams total points accumulated up to Matchday 33 during the English Premier League 2023-2024 season.
 
-The remainder of this paper is structured as follows. @sec-data....
+The findings reveal significant insights: while all three variables showed a positive correlation with team success, market value emerged as the most potent predictor, suggesting that financial strength translates more effectively into on-field success than previously understood. 
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
-
-The remainder of this paper is structured as follows. @sec-data....
-
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
-
-The remainder of this paper is structured as follows. @sec-data....
+The remainder of the paper is structured as follows. @sec-data describes the data collection phase and methodology. @sec-model details the model's construction and theoretical underpinnings, as well as model predictions. @sec-results presents the results of the regression analysis, and @sec-discussion discusses the implications of the findings, as well as weaknesses and next steps.
 
 # Data {#sec-data}
 
@@ -310,7 +303,7 @@ In @fig-pts_vs_average_home_matchday_attendance, @fig-pts_vs_total_wage_bill, @f
 
 When running simple linear regression with `Points` ~ `Each Dependent Variable`, you're looking at the relationship between each variable in isolation with `Points`. The positive trend and strong correlation coefficients found in @fig-pts_vs_average_home_matchday_attendance, @fig-pts_vs_total_wage_bill, @fig-pts_vs_market_value when analyzed in isolation with `Points`, suggests that as `Market Value`, `Total Payroll`, and `Average Matchday Attendance` of a team increases (independently from each other), so do the points accumulated.
 
-# Model
+# Model {#sec-model}
 
 ## Linear Regression
 
@@ -557,7 +550,7 @@ plot <- ggplot(result_table, aes(x = actual_rank, y = predicted_rank, label = te
 print(plot)
 ```
 
-# Discussion
+# Discussion {#sec-discussion}
 
 The application of predictive analytics football, is an expanding field that can provide a competitive edge to clubs. This study aimed to correlate financial factors with team success highlighting the potential of data-driven decision-making in enhancing a team's competitive performance. The significant correlation between a team’s market value and league points serves as evidence of the tangible benefits that can be gained from predictive analytics
 
