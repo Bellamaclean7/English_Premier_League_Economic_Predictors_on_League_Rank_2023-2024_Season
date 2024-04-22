@@ -565,17 +565,19 @@ The data presented in @sec-results indicates a general correlation between the p
 
 The results of the regression analysis underscore the substantial role that economic factors play in the performance of English Premier League teams. The robust association between market value and league points, in particular, confirms the prevailing notion that financial strength translates into competitive success. The unexpected negative coefficient for the total wage bill is one of the most interesting aspect of this analysis. While not statistically significant, the correlation raises questions about the efficiency and return on investment of high player salaries. It hints that simply spending more on player wages does not guarantee better outcomes, highlighting the complexity of financial management in football.
 
-## Analyzing Chelsea F.C.'s Underachievement: An Outlier Case Study
+## Analyzing Chelsea F.C.'s Underachievement
 
-Within the predictions lies a couple outliers, with Chelsea F.C. being the most notable. Chelsea's actual points stand at 47, while the model predicted they would have achieved 58 points by Matchday 33. This discrepancy of 11 points is significant and suggests that Chelsea F.C. is underperforming relative to its financial status. As a club known to have a substantial payroll and high market value, which are indicators of a team's wealth and resources available for acquiring talent, the expectation would be for Chelsea to secure a position closer to the top of the table.
+Within the predictions lies a couple outliers, with Chelsea F.C. being the most notable. Chelsea's actual points stand at 47, while the model predicted they would have achieved 58 points by Matchday 33. This discrepancy of 11 points is significant and suggests that Chelsea F.C. is underperforming relative to its financial status. As a club known to have a substantial payroll and high market value, and a significant fan base, which are indicators of a team's wealth and resources available for acquiring talent, the expectation would be for Chelsea to secure a position closer to the top of the table.
 
 This outlier status of Chelsea F.C. draws attention and could prompt stakeholders to conduct a deeper analysis into why the club is not meeting the expectations set by its financial prowess. It raises questions about the efficacy of the investments made by the club and whether financial muscle is translating into performance on the pitch as anticipated. 
 
 Chelsea F.C.'s lower-than-expected league points despite its significant financial outlay exemplifies the multifaceted nature of football performance. The discrepancy between predicted and actual points for Chelsea F.C. is one of the largest among all teams, prompting a closer look at factors beyond the economic predictors used in this study. It serves as a reminder that team cohesion, tactical decisions, and possibly non-quantifiable elements such as team spirit and injuries can heavily influence results. As such, Chelsea F.C.'s example could be a launching pad for exploring the non-economic dimensions that interplay with financial resources to shape the fortunes of a football club.
 
-## Second discussion point
+## Analyzing Fulham F.C.'s Overachievement
 
-## Third discussion point
+Despite having relatively modest financial metrics compared to the league's top spenders, Fulham F.C. managed to outperform the projections. Fulham's actual points stand at 42 (12th place), while the model predicted they would have achieved only 31 points (17th place) by Matchday 33. This suggests that Fulham F.C. is outperforming relative to their financial status.
+
+This suggests that their are ways in which other areas of the game besides financial metrics lead to higher league rankings. This could include effective management, coaching, and perhaps strong team cohesion that transcends financial capabilities. Perhaps Fulham's management has excelled this season in areas such as player development, game strategy, and optimizing team dynamics. Management strategies and the coaching staff's ability to maximize player potential and tactical execution on a budget far less then their more successful counterparts could aid other clubs in understanding how to maximize results while minimizing expenditures.
 
 ## Weaknesses and next steps
 
