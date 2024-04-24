@@ -1,43 +1,69 @@
-# Model Card templates
+# Model card for model.rds
 
-[Jinja templates](https://jinja.palletsprojects.com/) are the backend structure of a Model Card document. The Model Card Toolkit comes with a few pre-made templates, but you can freely modify these templates or even build your own. In this document, we will discuss how to do this.
+Jump to section:
 
-The following is the standard way you may initialize the Model Card Toolkit.
+- [Model details](#model-details)
+- [Intended use](#intended-use)
+- [Data](#data)
+- [Model Justification](model-justification)
+- [Model Training and Validation](#model-training-and-validation)
+- [Results](#results)
+- [Ethical considerations](#ethical-considerations)
+- [Usage and Maintenance](#usage-and-maintenance)
+- [Conclusion](#conclusion)
 
-```py
-mct_directory = ...  # where the Model Card assets will be generated
-toolkit = ModelCardToolkit(mct_directory)
-model_card = toolkit.scaffold_assets()
-... # set the model_card's fields here
-toolkit.update_model_card(model_card)
-```
+## Model details
 
-When you run `toolkit.scaffold_assets()`, the contents of [model_card_toolkit/template](https://github.com/tensorflow/model-card-toolkit/tree/main/model_card_toolkit/template) are copied into `mct_directory/template`. This includes premade templates such as [default_template.html.jinja](https://github.com/tensorflow/model-card-toolkit/blob/main/model_card_toolkit/template/html/default_template.html.jinja) and [default_template.md.jinja](https://github.com/tensorflow/model-card-toolkit/blob/main/model_card_toolkit/template/md/default_template.md.jinja).
+Model Type: Linear Regression
+Function: lm in R
+Model Version: 1.0
 
-The
-[`model_card`](https://www.tensorflow.org/responsible_ai/model_card_toolkit/api_docs/python/model_card_toolkit/ModelCard)
-object generated above can be manually populated. Once you are ready to generate
-a Model Card document, you can pass the `model_card` back into MCT with
-`toolkit.update_model_card(model_card)`.
+## Intended use
 
-### Use a Premade Model Card Template
+Purpose: To predict the performance of English Premier League (EPL) teams based on various economic factors.
 
-We can then generate a Model Card document using one of the default templates, via the code below.
+Intended Use: This model is intended for sports analysts, team strategists, and sports economists to assess how different economic factors influence team success in the league standings.
 
-```py
-template_path = os.path.join(mct_directory, 'template/html/default_template.html.jinja')
-toolkit.export_format(template_path=template_path, output_file='model_card.html')
-```
+## Data
 
-### Modify the Model Card Template
+Variables Used
 
-You can freely modify a premade template to change styling, reorganize information, etc. You should be familiar with the [Jinja API](https://jinja.palletsprojects.com/en/2.11.x/api/) and [control structures](https://jinja.palletsprojects.com/en/2.11.x/templates/#list-of-control-structures). Model Card field names are taken from [model_card.py](https://github.com/tensorflow/model-card-toolkit/blob/main/model_card_toolkit/model_card.py).
+Dependent Variable: Points (pts)
 
-### Creating a new Model Card Template
+Independent Variables: Average home matchday attendance, total wage bill, market value.
 
-Creating a new Model Card template works the same as modifying an existing one.
+## Model Justification
 
-```py
-my_custom_template_path = ...  # where the template is stored
-toolkit.export_format(template_path=my_custom_template_path, output_file'model_card.html')  # generate the final Model Card
-```
+Hypothesis: There is a positive correlation between the team's performance (points) and the three independent variables: home matchday attendance, total payroll, and market value. Higher values in these variables are expected to result in a higher number of points, reflecting better performance in the league.
+
+## Model Training and Validation
+
+Algorithm: Linear regression using the lm function in R.
+
+Evaluation: The model's performance was evaluated based on the significance of coefficients, the magnitude of R-squared, and residual analysis.
+
+## Results
+
+Coefficients: The model found significant positive relationships for some predictors with team points, particularly market value.
+
+Performance Metrics
+R-squared: 0.8057
+Adjusted R-squared: 0.7693
+F-statistic: 22.12 on 3 and 16 DF
+p-value: 6.159e-06
+
+## Ethical Considerations
+
+Fairness and Bias: Attention was given to the equitable representation of teams in the data. Further analysis is required to address potential biases and ensure fairness across variables.
+
+Mitigation Strategies: Ongoing analysis will be required to monitor and adjust for any biases or anomalies detected in the model predictions.
+
+## Usage and Maintenance
+
+Recommendations for Maintenance: It is recommended to update the model annually with new season data to maintain its accuracy and relevance.
+
+Contact: For more details or queries regarding the model, please contact bella.maclean@mail.utoronto.ca
+
+## Conclusion
+
+This model provides insights into the factors influencing EPL team performance, with significant predictive capability as demonstrated by the strong R-squared value. The identified relationships between team performance and economic factors can assist in strategic decision-making for team management and investment.
