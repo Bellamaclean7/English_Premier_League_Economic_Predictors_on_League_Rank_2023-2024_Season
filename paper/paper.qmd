@@ -51,6 +51,8 @@ total_transfer_spending <- read_csv(here::here("data/raw_data/total_transfer_spe
 show_col_types = FALSE
 ```
 
+\newpage
+
 # Introduction
 
 Established in 1992, the English Premier League comprises twenty clubs that compete annually, embarking on a 38 week season, each striving not only for the championship but also to avoid relegation. The English Premier League is the wealthiest football league globally, producing a total revenue of €10.5 billion as of the end of the 2022/2023 season [@EPLHistory]. Since the league began in 1992, only seven teams have come out victorious, with three of the seven teams only winning once (Leicester City 2015/16, Blackburn Rovers 1994/95 and Liverpool 2019/20) [@PremierLeagueExplained].
