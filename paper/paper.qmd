@@ -245,7 +245,7 @@ ggplot(analysis_data, aes(x = pts, y = total_wage_bill)) +
       axis.title.x = element_text(size = 8),  
       axis.title.y = element_text(size = 8)
   ) +
-  labs(title = "Total Payroll in Relation to League Point",
+  labs(title = "Total Payroll in Relation to League Points",
        subtitle = paste("Correlation coefficient:", cor_wages),
        x = "Total League Points",
        y = "Total Payroll")
@@ -354,6 +354,8 @@ The linear regression model given by Equation (2), derived from the foundational
 ## Model Prediction
 
 A positive relationship is hypothesized between the dependent variable (`Points`) and the three independent variables (`Home Matchday Attendance`, `Total Payroll`, and `Market Value`). The underlying assumption is that higher values for these independent variables should correlate with an increased number of points earned by a team. Such a correlation would suggest that greater fan engagement (as reflected in matchday attendance), higher investment in player talent (as indicated by the payroll), and a more substantial market presence (denoted by market value) are all strategic levers that could lead to better performance in the league.
+
+\newpage
 
 # Results {#sec-results}
 
